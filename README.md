@@ -1,2 +1,3 @@
 # event-driven-spring-boot-kotlin
+The event-driven-spring-boot-kotlin project utilizes Spring Boot with Kotlin to build an application based on event-driven architecture. This project leverages Spring's support for event handling to decouple components, allowing for asynchronous processing of events. It typically includes features for publishing and subscribing to events using tools like Spring Cloud Stream and messaging systems such as Kafka or RabbitMQ. The result is a responsive and scalable application that efficiently handles real-time data and complex workflows.
 To start Implementation from backend with @DeveloperSpirit. all over concepts must be cover as well we will develop quality productivity for application. contact via mail: developerspirit95@gmail.com .
