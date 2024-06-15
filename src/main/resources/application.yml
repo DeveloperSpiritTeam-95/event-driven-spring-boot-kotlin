@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: event-driven-spring-boot-kotlin
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: SpringMongoDemo
+      repositories:
+        type: auto
