@@ -61,5 +61,15 @@ class CustomerAggregate {
         this.isDeleted = true
     }
 
+    @CommandHandler
+    fun handlerForRecover(command: RecoverCustomerCommand){
+        AggregateLifecycle.apply(CustomerRecoveredEvent(command.id))
+    }
+
+    @EventSourcingHandler
+    fun handlerForRecover(event: CustomerRecoveredEvent){
+
+    }
+
 
 }

@@ -1,10 +1,7 @@
 package com.start.eventdrivenspringbootkotlin.example1.service
 
 import com.start.eventdrivenspringbootkotlin.configuration.Response
-import com.start.eventdrivenspringbootkotlin.example1.api.CreateCustomerCommand
-import com.start.eventdrivenspringbootkotlin.example1.api.CustomerDto
-import com.start.eventdrivenspringbootkotlin.example1.api.DeleteCustomerCommand
-import com.start.eventdrivenspringbootkotlin.example1.api.UpdateCustomerCommand
+import com.start.eventdrivenspringbootkotlin.example1.api.*
 import com.start.eventdrivenspringbootkotlin.example1.query.CustomerRepository
 import com.start.eventdrivenspringbootkotlin.util.PageRequestParam
 import com.start.eventdrivenspringbootkotlin.util.RestPage
@@ -48,12 +45,26 @@ data class CustomerService (private val commandGateway: CommandGateway,
     }
 
     fun temporaryDeleteById(command: DeleteCustomerCommand): CompletableFuture<Response<String>> {
-        val optionalDoctor = this.repository.findById(command.id!!)
-        if (optionalDoctor.isEmpty) {
+        val optionalCustomer = this.repository.findById(command.id!!)
+        if (optionalCustomer.isEmpty) {
             return CompletableFuture.completedFuture(Response.withError("Customer Not Present"))
         }
         val result = commandGateway.send<Any>(command).thenApply { _ ->
             Response.ofResponse(" Customer Deleted Successfully with -> ${command.id}")
+        }.exceptionally { x ->
+            logger.error(x.message)
+            Response.withError(x.message)
+        }
+        return result
+    }
+
+    fun recoverById(command: RecoverCustomerCommand): CompletableFuture<Response<String>> {
+        val optionalCustomer = this.repository.findById(command.id!!)
+        if (optionalCustomer.isEmpty) {
+            return CompletableFuture.completedFuture(Response.withError("Customer Not Present"))
+        }
+        val result = commandGateway.send<Any>(command).thenApply { _ ->
+            Response.ofResponse(" Customer Recover Successfully with -> ${command.id}")
         }.exceptionally { x ->
             logger.error(x.message)
             Response.withError(x.message)
@@ -97,6 +108,8 @@ data class CustomerService (private val commandGateway: CommandGateway,
             else Response.ofResponse(r)
         }.exceptionally { e -> Response.withError(e.message) }
     }
+
+
 
 
 }

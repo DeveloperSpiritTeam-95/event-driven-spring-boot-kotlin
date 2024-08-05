@@ -23,9 +23,9 @@ object CustomerConverter {
         return DeleteCustomerCommand(id)
     }
 
-//    fun convertDtoToRecoverCommand(id: String): RecoverDoctorCommand{
-//        return RecoverCustomerCommand(id)
-//    }
+    fun convertDtoToRecoverCommand(id: String): RecoverCustomerCommand{
+        return RecoverCustomerCommand(id)
+    }
 
     fun modelToDtoList(customers: List<Customer>): List<CustomerDto> {
         return customers.stream().map{ x -> convertModelToDTO(x) }.toList()

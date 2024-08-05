@@ -43,6 +43,12 @@ class CustomerController {
         return this.customerService!!.temporaryDeleteById(result)
     }
 
+    @PutMapping( "/recoverById/{id}")
+    fun recoverById(@PathVariable("id") id: String): CompletableFuture<Response<String>>{
+        val result = CustomerConverter.convertDtoToRecoverCommand(id)
+        return this.customerService!!.recoverById(result)
+    }
+
 
     @GetMapping("/getCustomerById/{id}")
     fun getCustomerById(@PathVariable("id") id: String): CompletableFuture<Response<CustomerDto>>{

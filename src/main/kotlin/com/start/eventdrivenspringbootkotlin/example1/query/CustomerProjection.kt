@@ -1,10 +1,8 @@
 package com.start.eventdrivenspringbootkotlin.example1.query
 
-import com.start.eventdrivenspringbootkotlin.example1.api.CustomerCreatedEvent
-import com.start.eventdrivenspringbootkotlin.example1.api.CustomerDeletedEvent
-import com.start.eventdrivenspringbootkotlin.example1.api.CustomerDto
-import com.start.eventdrivenspringbootkotlin.example1.api.CustomerUpdatedEvent
+import com.start.eventdrivenspringbootkotlin.example1.api.*
 import com.start.eventdrivenspringbootkotlin.example1.util.CustomerConverter
+import com.start.eventdrivenspringbootkotlin.util.PageRequestParam
 import com.start.eventdrivenspringbootkotlin.util.RestPage
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.queryhandling.QueryHandler
@@ -43,6 +41,15 @@ data class CustomerProjection(private val repository: CustomerRepository) {
         val state = this.repository.findById(event.id!!)
         if (state.isPresent) {
             state.get().isDeleted = true
+            this.repository.save(state.get())
+        }
+    }
+
+    @EventHandler
+    fun recoverDeletedCustomer(event: CustomerRecoveredEvent){
+        val state = this.repository.findById(event.id!!)
+        if (state.isPresent) {
+            state.get().isDeleted = false
             this.repository.save(state.get())
         }
     }
@@ -91,7 +98,7 @@ data class CustomerProjection(private val repository: CustomerRepository) {
 
 
     @QueryHandler(queryName = "findAllCustomersPagination")
-    fun searchByNamePagination(pagination: com.start.eventdrivenspringbootkotlin.util.PageRequestParam): RestPage {
+    fun searchByNamePagination(pagination: PageRequestParam): RestPage {
 
         val result: Page<Customer>
         val sortColumns = pagination.sortColumns?.toTypedArray()

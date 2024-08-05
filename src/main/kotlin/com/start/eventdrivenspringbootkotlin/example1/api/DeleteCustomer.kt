@@ -10,3 +10,12 @@ data class DeleteCustomerCommand(
 data class CustomerDeletedEvent(
     var id: String? = null,
 )
+
+data class RecoverCustomerCommand(
+    @TargetAggregateIdentifier
+    var id: String? = null
+)
+
+data class CustomerRecoveredEvent(
+    var id: String? = null
+)
